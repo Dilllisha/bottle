@@ -56,6 +56,9 @@ async def test(message:Message):
           f"\n Погода: {weather}\n Ветер: {wind} м/с\n Влажность: {humi}%")
 
     if city is not None:
-        await message.answer(ad, keyboard=keyboard)
+        try:
+            await message.answer(ad, keyboard=keyboard)
+        except:
+            await message.answer("Ничего не удалось найти по зпдпнному городу", keyboard=keyboard)
 
 bot.run_forever()
