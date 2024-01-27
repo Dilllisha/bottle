@@ -62,4 +62,4 @@ async def test(message: Message):
             await message.answer("Ничего не удалось найти по зпдпнному городу", keyboard=keyboard)
 
 
-bot.run_forever()
+await bot.run_forever()
