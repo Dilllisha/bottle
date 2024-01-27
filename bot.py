@@ -16,22 +16,22 @@ class Weather(BaseStateGroup):
 
 @bot.on.private_message(text="start")
 @bot.on.private_message(payload={"back": "start"})
-async def start(message: Message):
+await def start(message: Message):
     keyboard = Keyboard(one_time=True)
     # keyboard.add(Text("GPT", {"next": "gpt"}), color=KeyboardButtonColor.NEGATIVE)
     keyboard.add(Text("Погода"), color=KeyboardButtonColor.POSITIVE)
-    await message.answer("Выберите что-то из предложенного списка", keyboard=keyboard)
+    message.answer("Выберите что-то из предложенного списка", keyboard=keyboard)
 
 @bot.on.private_message(lev="Погода")
 @bot.on.private_message(payload={"next": "weather"})
-async def waiting_for_city_name(message: Message):
-    await bot.state_dispenser.set(message.peer_id, Weather.city_name)
+await def waiting_for_city_name(message: Message):
+    bot.state_dispenser.set(message.peer_id, Weather.city_name)
     return "Введите название города"
 
 @bot.on.private_message(state=Weather.city_name)
-async def test(message: Message):
+await def test(message: Message):
     ctx.set("city_name", message.text)
-    await bot.state_dispenser.delete(message.peer_id)
+    bot.state_dispenser.delete(message.peer_id)
     city = ctx.get("city_name")
 
     keyboard = Keyboard(one_time=True)
@@ -58,8 +58,8 @@ async def test(message: Message):
 
     if city is not None:
         try:
-            await message.answer(ad, keyboard=keyboard)
+            message.answer(ad, keyboard=keyboard)
         except:
-            await message.answer("Ничего не удалось найти по зпдпнному городу", keyboard=keyboard)
+            message.answer("Ничего не удалось найти по зпдпнному городу", keyboard=keyboard)
 
-bot.run_polling()
+async bot.run_forever()
