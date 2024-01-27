@@ -62,4 +62,4 @@ async def test(message: Message):
         except:
             await message.answer("Ничего не удалось найти по зпдпнному городу", keyboard=keyboard)
 
-bot.run_forever()
+bot.run_pooling()
