@@ -9,27 +9,25 @@ bot = Bot(
     token="vk1.a.C_QxUPu1KbMgKjXpWOMc6_5id0Py_Hj5jr3r9GIN1sHDypJLsKkSj6eQnGDM9Wudxy5u57R_w0RuoS-JX5pXYMVBCNRcpmFWYMmiedXp8zci4jckVaMt59Os-3Hanm2v1WLe0byeebKyAftdWe2V_Fy6BrfB5nx1_qg_hWudZVgELW9BvG0o_hqVlHVGMFJN0D4WoghSYVGaycDdmtUs6Q")
 
 ctx = CtxStorage()
-print("ok")
-
 class Weather(BaseStateGroup):
     city_name = None
 
 @bot.on.private_message(text="start")
 @bot.on.private_message(payload={"back": "start"})
-await def start(message: Message):
+async def start(message: Message):
     keyboard = Keyboard(one_time=True)
     # keyboard.add(Text("GPT", {"next": "gpt"}), color=KeyboardButtonColor.NEGATIVE)
     keyboard.add(Text("Погода"), color=KeyboardButtonColor.POSITIVE)
-    message.answer("Выберите что-то из предложенного списка", keyboard=keyboard)
+    await message.answer("Выберите что-то из предложенного списка", keyboard=keyboard)
 
 @bot.on.private_message(lev="Погода")
 @bot.on.private_message(payload={"next": "weather"})
-await def waiting_for_city_name(message: Message):
-    bot.state_dispenser.set(message.peer_id, Weather.city_name)
+async def waiting_for_city_name(message: Message):
+    await bot.state_dispenser.set(message.peer_id, Weather.city_name)
     return "Введите название города"
 
 @bot.on.private_message(state=Weather.city_name)
-await def test(message: Message):
+async def test(message: Message):
     ctx.set("city_name", message.text)
     bot.state_dispenser.delete(message.peer_id)
     city = ctx.get("city_name")
@@ -58,8 +56,8 @@ await def test(message: Message):
 
     if city is not None:
         try:
-            message.answer(ad, keyboard=keyboard)
+            await message.answer(ad, keyboard=keyboard)
         except:
-            message.answer("Ничего не удалось найти по зпдпнному городу", keyboard=keyboard)
+            await message.answer("Ничего не удалось найти по зпдпнному городу", keyboard=keyboard)
 
-async bot.run_forever()
+bot.run_forever()
