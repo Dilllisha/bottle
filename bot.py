@@ -63,4 +63,4 @@ async def start():
             except:
                 await message.answer("Ничего не удалось найти по зпдпнному городу", keyboard=keyboard)
 
-asyncio.run(start())
+asyncio.run(start)
