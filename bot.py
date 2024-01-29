@@ -81,20 +81,13 @@ async def gpt_answer(message: Message):
     keyboard = Keyboard(one_time=True)
     keyboard.add(Text("Задать новый вопрос", {"next": "gpt"}), color=KeyboardButtonColor.NEGATIVE)
     keyboard.add(Text("Назад", {"back": "start"}), color=KeyboardButtonColor.POSITIVE)
-
-    try:
-        response = openai.chat.completions.create(
-            model = "gpt-3.5-turbo",
-            messages = [
-                {'role': 'user', 'content': gpt_question}
-            ],
-            temperature= 6
-        )
-        await message.answer(response)
-    except:
-        await message.answer("Что-то пошло не так")
-
-
-
+    response = openai.chat.completions.create(
+        model = "gpt-3.5-turbo",
+        messages = [
+            {'role': 'user', 'content': gpt_question}
+        ],
+        temperature= 6
+    )
+    await message.answer(response)
 
 bot.run_forever()
