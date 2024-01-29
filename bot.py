@@ -9,10 +9,11 @@ bot = Bot(
 openai.api_key = 'sk-zydahm'+'FVX9X6u'+'GG4iFAP'+'T3BlbkFJE'+'yoeKpApu'+'UOWC09ZDej1'
 ctx = CtxStorage()
 
-
+class Gpt(BaseStateGroup):
+    question = None
+    
 class Weather(BaseStateGroup):
     city_name = None
-    question = None
 
 
 @bot.on.private_message(text="start")
@@ -68,15 +69,15 @@ async def weather_answer(message: Message):
 @bot.on.private_message(lev="GPT")
 @bot.on.private_message(payload={"next": "gpt"})
 async def waiting_gpt_message(message: Message):
-    await bot.state_dispenser.set(message.peer_id, Weather.question)
+    await bot.state_dispenser.set(message.peer_id, Gpt.question)
     return "Вы находитесь в chat-gpt боте. Для выхода из диалога с ботом напишите 'стоп'"
 
 
-@bot.on.private_message(state=Weather.question)
+@bot.on.private_message(state=Gpt.question)
 async def gpt_answer(message: Message):
-    ctx.set("gpt_question", message.text)
+    ctx.set("question", message.text)
     bot.state_dispenser.delete(message.peer_id)
-    gpt_question = ctx.get("gpt_question")
+    gpt_question = ctx.get("question")
 
     keyboard = Keyboard(one_time=True)
     keyboard.add(Text("Задать новый вопрос", {"next": "gpt"}), color=KeyboardButtonColor.NEGATIVE)
