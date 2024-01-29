@@ -1,3 +1,4 @@
 setuptools
 vkbottle
 pyowm
+openai
